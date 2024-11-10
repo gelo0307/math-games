@@ -1,0 +1,297 @@
+/* Center the main container for desktop view */
+body {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    min-height: 100vh;
+    margin: 0;
+    background-color: #f4f4f4;
+}
+
+/* Main content area to center game elements */
+#main-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    max-width: 600px; /* Limit width for better alignment */
+    padding: 20px;
+    box-sizing: border-box;
+}
+
+/* Adjust centering and layout for large screens */
+@media (min-width: 769px) {
+    #score-container, #timer, #difficulty-buttons, #reset-btn {
+        text-align: center;
+    }
+
+    /* Center game board and other elements */
+    #game-board {
+        margin: 0 auto;
+    }
+
+    /* Modal centered with max width */
+    #score-modal {
+        margin: auto;
+        max-width: 400px;
+    }
+}
+
+/* Responsive adjustments for mobile screens */
+@media (max-width: 768px) {
+    #main-content {
+        width: 100%; /* Full width on mobile */
+        padding: 10px;
+    }
+}
+
+
+/* Make score container, timer, and buttons stack vertically on mobile */
+@media (max-width: 768px) {
+    #score-container {
+        flex-direction: column;
+        gap: 10px; /* Reduce gap on mobile */
+    }
+
+    #difficulty-buttons button {
+        width: 100%; /* Make buttons take full width on mobile */
+        font-size: 16px; /* Adjust font size */
+    }
+
+    #reset-btn {
+        width: 100%; /* Full width on mobile */
+        font-size: 14px; /* Smaller font size */
+    }
+
+    #game-board.grid-3x3, #game-board.grid-4x4 {
+        width: 100%; /* Responsive width */
+        height: auto; /* Adjust height automatically */
+        gap: 10px; /* Adjust gap between cells */
+    }
+
+    #game-board div {
+        width: 80px; /* Reduce cell size */
+        height: 80px;
+        font-size: 24px; /* Reduce font size for numbers */
+    }
+
+    /* Modal adjustments */
+    #score-modal {
+        width: 90%;
+        padding: 15px;
+        font-size: 18px; /* Adjust font size for modal text */
+    }
+
+    #score-modal button {
+        width: 100%; /* Full width button in modal */
+        font-size: 16px;
+    }
+}
+
+/* Even smaller screens (e.g., very small phones) */
+@media (max-width: 480px) {
+    #game-board div {
+        width: 60px; /* Further reduce cell size */
+        height: 60px;
+        font-size: 20px;
+    }
+
+    #time, #points, #tokens {
+        font-size: 16px; /* Adjust score font size */
+    }
+}
+
+
+
+#game-board {
+    display: grid;
+    gap: 15px;
+    margin: 20px auto;
+    width: fit-content;
+}
+
+/* Modal container */
+.modal {
+    display: none; /* Hidden by default */
+    position: fixed;
+    z-index: 1; /* Sit on top */
+    left: 0;
+    top: 0;
+    width: 100%; /* Full width */
+    height: 100%; /* Full height */
+    overflow: auto; /* Enable scroll if needed */
+    background-color: rgb(0, 0, 0); /* Fallback color */
+    background-color: rgba(0, 0, 0, 0.4); /* Black with opacity */
+}
+
+/* Modal content */
+.modal-content {
+    background-color: #fefefe;
+    margin: 15% auto; /* 15% from the top and centered */
+    padding: 20px;
+    border: 1px solid #888;
+    width: 80%; /* Could be more or less, depending on screen size */
+    max-width: 400px;
+    text-align: center;
+    border-radius: 10px;
+}
+
+/* Close button for the modal */
+.close {
+    color: #aaa;
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+}
+
+.close:hover,
+.close:focus {
+    color: black;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+
+
+/* Style the container for points and tokens */
+#score-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 20px;  /* Adjust the gap between points and tokens */
+    font-size: 18px;
+    font-weight: bold;
+    color: #333;
+    margin-bottom: 20px; /* Adjust space between score and game board */
+}
+
+/* Individual score item */
+#points, #tokens {
+    font-size: 18px;
+    font-weight: bold;
+    color: #333;
+}
+
+#time {
+    font-size: 30px;
+    padding-bottom: 20px;
+}
+
+
+
+/* Styling for 3x3 grid (easy and medium modes) */
+#game-board.grid-3x3 {
+    grid-template-columns: repeat(3, 150px);
+    grid-template-rows: repeat(3, 150px);
+    width: 480px;
+    height: 480px;
+}
+
+/* Styling for 4x4 grid (hard mode) */
+#game-board.grid-4x4 {
+    grid-template-columns: repeat(4, 120px);
+    grid-template-rows: repeat(4, 120px);
+    width: 510px;
+    height: 510px;
+}
+
+/* Styling for individual cells */
+#game-board div {
+    width: 100px;
+    height: 100px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 28px;
+    background-color: #ddd;
+    cursor: pointer;
+    user-select: none;
+    border-radius: 8px;
+    transition: background-color 0.1s ease, box-shadow 0.1s ease;
+    box-shadow: 3px 3px 8px rgba(0, 0, 0, 0.2); /* Initial shadow for 3D effect */
+}
+
+/* Blinking red effect for aligned numbers */
+.blink-red {
+    animation: blinkRed 0.5s alternate infinite;
+}
+
+@keyframes blinkRed {
+    0% {
+        background-color: #ddd;
+    }
+    100% {
+        background-color: red;
+    }
+}
+
+/* 3D pressed effect for grid cell */
+#game-board div:active {
+    background-color: #bbb; /* Slightly darker background */
+    box-shadow: inset 3px 3px 5px rgba(0, 0, 0, 0.3); /* Inset shadow for pressed effect */
+}
+
+
+/* Styling for the difficulty buttons */
+#difficulty-buttons button {
+    padding: 10px 20px;
+    font-size: 18px;
+    margin: 5px;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    background: linear-gradient(145deg, #e6e6e6, #ffffff); /* Light gradient for 3D look */
+    color: #333;
+    box-shadow: 4px 4px 10px rgba(0, 0, 0, 0.2), -4px -4px 10px rgba(255, 255, 255, 0.8); /* 3D shadow */
+    transition: background 0.1s ease, box-shadow 0.1s ease, color 0.1s ease;
+}
+
+/* Pressed button effect */
+#difficulty-buttons button:active {
+    background: #333; /* Black background when active */
+    color: #fff;      /* White text for contrast */
+    box-shadow: inset 3px 3px 5px rgba(0, 0, 0, 0.3); /* Inset shadow for pressed effect */
+}
+
+/* Hover effect */
+#difficulty-buttons button:hover {
+    background: linear-gradient(145deg, #f0f0f0, #dcdcdc);
+}
+
+/* Start Time button styling */
+#start-time-btn {
+    padding: 10px 20px;
+    font-size: 18px;
+    margin: 5px;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    background: linear-gradient(145deg, #e6e6e6, #ffffff); /* Light gradient for 3D effect */
+    color: #333;
+    box-shadow: 4px 4px 10px rgba(0, 0, 0, 0.2), -4px -4px 10px rgba(255, 255, 255, 0.8); /* 3D shadow */
+    transition: background 0.1s ease, box-shadow 0.1s ease, color 0.1s ease;
+}
+
+/* Pressed effect on the Start Time button */
+#start-time-btn:active {
+    background: #333; /* Dark background when clicked */
+    color: #fff;      /* White text for visibility */
+    box-shadow: inset 3px 3px 5px rgba(0, 0, 0, 0.3); /* Inset shadow for pressed effect */
+}
+
+/* Hover effect for Start Time button */
+#start-time-btn:hover {
+    background: linear-gradient(145deg, #f0f0f0, #dcdcdc);
+}
+
+
+#reset-btn {
+    padding: 10px 20px;
+    font-size: 16px;
+    margin-top: 20px;
+}
+
+#timer {
+    font-size: 18px;
+    margin-top: 20px;
+}

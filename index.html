@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Number Matching Game</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <h1>Number Matching Game</h1>
+    <div id="score-container">
+        <span id="points">Points: 0</span>
+        <span id="tokens">Tokens: 0</span>
+    </div>
+    
+    <div id="analog-clock" class="clock">
+    <div id="minute-hand" class="hand minute-hand"></div>
+    <div id="second-hand" class="hand second-hand"></div>
+    <div class="clock-center"></div>
+</div>
+    
+    <!-- Difficulty buttons -->
+    <div id="difficulty-buttons">
+        <button id="easy-btn">Easy</button>
+        <button id="medium-btn">Medium</button>
+        <button id="hard-btn">Hard</button>
+    </div>
+    <div id="timer">Time: <span id="time">00:00</span>s</div>
+
+    <div id="game-board" class="grid"></div>
+    <button id="reset-btn">Reset Game</button>
+    <div id="game-notice" style="display: none; color: red; text-align: center;"></div>
+
+    <!-- Modal for displaying the score at the end of the game -->
+<div id="game-over-modal" class="modal" style="display: none;">
+    <div class="modal-content">
+        <span id="close-modal" class="close">&times;</span>
+        <h2>Game Over!</h2>
+        <p id="final-score">Your final score:</p>
+        <p><span id="final-points">Points: 0</span></p>
+        <p><span id="final-tokens">Tokens: 0</span></p>
+    </div>
+</div>
+    <script src="game.js"></script>
+</body>
+</html>
