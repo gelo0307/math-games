@@ -65,6 +65,8 @@ document.addEventListener("DOMContentLoaded", () => {
         updateScoreDisplay();
     }
 
+    
+
     // Handle Cell Click
     function handleCellClick(row, col) {
         if (unclickableSquares[row][col] || gameOver) return;
@@ -172,16 +174,20 @@ document.addEventListener("DOMContentLoaded", () => {
     
     
     function showGameOverNotice(message) {
-        // Show modal with final score
+        console.log("Game over triggered"); // Add this for debugging
+        
         const modal = document.getElementById("game-over-modal");
         const finalPoints = document.getElementById("final-points");
         const finalTokens = document.getElementById("final-tokens");
-    
+        
         // Set the text for the final score in the modal
         finalPoints.textContent = `Points: ${points}`;
         finalTokens.textContent = `Tokens: ${tokens}`;
-    
+        
         modal.style.display = "block"; // Show the modal
+        
+        // Play the congratulations sound
+        congratulationsSound.play();
     }
     
     // Close the modal when the "x" is clicked
@@ -213,52 +219,49 @@ document.addEventListener("DOMContentLoaded", () => {
 
     function showGameOverNotice(message) {
         console.log("Game over triggered"); // Add this for debugging
-    
+        
         const modal = document.getElementById("game-over-modal");
         const finalPoints = document.getElementById("final-points");
         const finalTokens = document.getElementById("final-tokens");
-    
+        
         // Set the text for the final score in the modal
         finalPoints.textContent = `Points: ${points}`;
         finalTokens.textContent = `Tokens: ${tokens}`;
-    
+        
         modal.style.display = "block"; // Show the modal
-
-         
-    // Play the congratulations sound
-    congratulationsSound.play();
+        
+        // Play the congratulations sound
+        congratulationsSound.play();
+        
+        // Set a timer to stop the sound after 8 seconds
+        setTimeout(() => {
+            congratulationsSound.pause();
+            congratulationsSound.currentTime = 0; // Reset to the start for the next game
+        }, 8000); // 8000 milliseconds = 8 seconds
     }
-
-    // Show Modal with Final Score
-function showModalWithScore() {
-    // Create modal container
-    const modal = document.createElement("div");
-    modal.id = "score-modal";
-    modal.style.position = "fixed";
-    modal.style.top = "50%";
-    modal.style.left = "50%";
-    modal.style.transform = "translate(-50%, -50%)";
-    modal.style.backgroundColor = "#fff";
-    modal.style.padding = "20px";
-    modal.style.boxShadow = "0 0 15px rgba(0,0,0,0.3)";
-    modal.style.zIndex = "1000";
     
-    // Add score information
-    modal.innerHTML = `
-        <h2>Game Over!</h2>
-        <p>${notice.textContent}</p>
-        <p>Final Points: ${points}</p>
-        <p>Final Tokens: ${tokens}</p>
-        <button id="close-modal-btn">Close</button>
-    `;
-
-    // Append modal to body
-    document.body.appendChild(modal);
+    // Close the modal when the "x" is clicked
+    document.getElementById("close-modal").addEventListener("click", function () {
+        const modal = document.getElementById("game-over-modal");
+        modal.style.display = "none";
+        
+        // Stop the congratulations sound
+        congratulationsSound.pause();
+        congratulationsSound.currentTime = 0; // Reset to the start for the next game
+    });
     
-    // Add event listener to close button
-    document.getElementById("close-modal-btn").addEventListener("click", closeModal);
-}
-
+    // Close the modal if clicked outside of the content area
+    window.addEventListener("click", function (event) {
+        const modal = document.getElementById("game-over-modal");
+        if (event.target === modal) {
+            modal.style.display = "none";
+            
+            // Stop the congratulations sound
+            congratulationsSound.pause();
+            congratulationsSound.currentTime = 0; // Reset to the start for the next game
+        }
+    });
+    
 // Close Modal and Stop Sound
 function closeModal() {
     const modal = document.getElementById("score-modal");
@@ -360,6 +363,29 @@ window.addEventListener("resize", adjustGridSizeForScreen);
     document.getElementById("start-time-btn").addEventListener("click", () => {
         startTimer(); // Start the timer when clicked
     });
+
+    document.getElementById("close-modal").addEventListener("click", function () {
+        const modal = document.getElementById("game-over-modal");
+        modal.style.display = "none";
+        
+        // Stop the congratulations sound
+        congratulationsSound.pause();
+        congratulationsSound.currentTime = 0; // Reset to the start for the next game
+    });
+    
+    // Close the modal if clicked outside of the content area
+    window.addEventListener("click", function (event) {
+        const modal = document.getElementById("game-over-modal");
+        if (event.target === modal) {
+            modal.style.display = "none";
+            
+            // Stop the congratulations sound
+            congratulationsSound.pause();
+            congratulationsSound.currentTime = 0; // Reset to the start for the next game
+        }
+    });
+    
+
 
     document.addEventListener("DOMContentLoaded", () => {
         // Game Mechanics modal elements

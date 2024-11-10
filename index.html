@@ -1,23 +1,24 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Number Matching Game</title>
+    <title>triple MATcH mania</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://fonts.googleapis.com/css2?family=Pacifico&display=swap" rel="stylesheet">
 
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-    <h1>Number Matching Game</h1>
+    <h1>triple MATcH mania</h1>
     <div id="score-container">
         <span id="points">Points: 0</span>
         <span id="tokens">Tokens: 0</span>
     </div>
     
     <div id="analog-clock" class="clock">
-    <div id="minute-hand" class="hand minute-hand"></div>
-    <div id="second-hand" class="hand second-hand"></div>
-    <div class="clock-center"></div>
-</div>
+        <div id="minute-hand" class="hand minute-hand"></div>
+        <div id="second-hand" class="hand second-hand"></div>
+        <div class="clock-center"></div>
+    </div>
     
     <!-- Difficulty buttons -->
     <div id="difficulty-buttons">
@@ -26,21 +27,209 @@
         <button id="hard-btn">Hard</button>
     </div>
     <div id="timer">Time: <span id="time">00:00</span>s</div>
+    
 
     <div id="game-board" class="grid"></div>
-    <button id="reset-btn">Reset Game</button>
-    <div id="game-notice" style="display: none; color: red; text-align: center;"></div>
+    <!-- Game Mechanic Buttons -->
+    <button id="mechanics-btn">Game Mechanics</button>
+
 
     <!-- Modal for displaying the score at the end of the game -->
-<div id="game-over-modal" class="modal" style="display: none;">
-    <div class="modal-content">
-        <span id="close-modal" class="close">&times;</span>
-        <h2>Game Over!</h2>
-        <p id="final-score">Your final score:</p>
-        <p><span id="final-points">Points: 0</span></p>
-        <p><span id="final-tokens">Tokens: 0</span></p>
+    <div id="game-over-modal" class="modal" style="display: none;">
+        <div class="modal-content">
+            <span id="close-modal" class="close">&times;</span>
+            <h2>Game Over!</h2>
+            <p id="final-score">Your final score:</p>
+            <p><span id="final-points">Points: 0</span></p>
+            <p><span id="final-tokens">Tokens: 0</span></p>
+        </div>
     </div>
-</div>
+
+    <!-- Modal for game mechanics -->
+    <div id="mechanics-modal" class="modal" style="display: none;">
+        <div class="modal-content">
+            <span id="close-mechanics" class="close">&times;</span>
+            <h2>Game Mechanics</h2>
+            <p>Instructions on how to play the game:</p>
+            <ul>
+                <li>Match the numbers on the game board within the time limit.</li>
+                <li>Choose a difficulty level to start the game.</li>
+                <li>Earn points and tokens based on your performance.</li>
+            </ul>
+        </div>
+    </div>
+
+    <audio id="congrats-sound" src="congrats.mp3"></audio> <!-- Congratulation sound -->
+
+    <style>
+        body {
+    font-family: Arial, sans-serif;
+    background-image: url('bg.jpg');
+    background-size: cover; /* Ensures the background covers the whole viewport */
+    background-position: center;
+    background-repeat: no-repeat;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
+    text-align: center;
+    color: #333;
+}
+        /* Styling for Game Mechanics and Reset Game buttons */
+#mechanics-btn, #reset-game-btn {
+    background: linear-gradient(145deg, #e0e0e0, #ffffff); /* Light gradient for 3D effect */
+    color: #333;
+    font-size: 16px;
+    font-weight: bold;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    box-shadow: 4px 4px 10px rgba(0, 0, 0, 0.3), -4px -4px 10px rgba(255, 255, 255, 0.8); /* Outer shadow for 3D effect */
+    transition: all 0.2s ease;
+}
+
+/* Hover effect for deeper shadow */
+#mechanics-btn:hover, #reset-game-btn:hover {
+    box-shadow: 6px 6px 12px rgba(0, 0, 0, 0.4), -6px -6px 12px rgba(255, 255, 255, 0.9); /* Enhanced shadow on hover */
+    transform: translateY(-3px); /* Slight lift effect */
+}
+
+/* Click effect for pressed look */
+#mechanics-btn:active, #reset-game-btn:active {
+    background: #ddd; /* Darker background to indicate press */
+    box-shadow: inset 3px 3px 5px rgba(0, 0, 0, 0.3); /* Inset shadow for pressed effect */
+    transform: translateY(2px); /* Slight downward movement */
+}
+
+.blink-red {
+    animation: blinkAnimation 1s infinite;
+}
+
+@keyframes blinkAnimation {
+    0% { background-color: #d8fa51; }   /* Start with the green color */
+    50% { background-color: transparent; } /* Fade to transparent */
+    100% { background-color: #d8fa51; }  /* End with the green color */
+}
+h1 {
+    font-family: 'Pacifico', cursive;
+    font-size: 3rem;  /* Adjust the size as needed */
+    color: #333;      /* You can change the color */
+    text-align: center;
+    margin-top: 20px;
+}
+/* Styling for individual grid cells with hover effect */
+#game-board div {
+    width: 100px;
+    height: 100px;
+    display: flex;
+    margin: 5px;
+    align-items: center;
+    justify-content: center;
+    font-size: 28px;
+    background-color: #ddd;
+    cursor: pointer;
+    user-select: none;
+    border-radius: 8px;
+    transition: background-color 0.1s ease, box-shadow 0.1s ease;
+    box-shadow: 3px 3px 8px rgba(0, 0, 0, 0.2); /* Initial shadow for 3D effect */
+}
+
+/* Hover effect for grid cells */
+#game-board div:hover {
+    box-shadow: 6px 6px 12px rgba(0, 0, 0, 0.3), -6px -6px 12px rgba(255, 255, 255, 0.8); /* Enhanced shadow */
+    transform: translateY(-3px); /* Slight lift effect */
+}
+
+/* Pressed effect for grid cells */
+#game-board div:active {
+    background-color: #bbb; /* Slightly darker background */
+    box-shadow: inset 3px 3px 5px rgba(0, 0, 0, 0.3); /* Inset shadow for pressed effect */
+}
+
+/* Main content area to center game elements */
+#main-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    max-width: 600px; /* Limit width for better alignment */
+    padding: 20px;
+    box-sizing: border-box;
+}
+
+#game-board {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 10px;
+        margin-bottom: 30px;
+        padding: 10px;
+        background-color: #fff;
+        border-radius: 15px;
+        border: 2px solid transparent; /* Transparent border initially */
+        background-image: linear-gradient(white, white), 
+                          linear-gradient(to right, #ff6347, #ff7f50); /* Dual gradient effect */
+        background-origin: border-box; /* Gradient applied to border */
+        background-clip: content-box, border-box; /* Make sure the content area and border are clipped separately */
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Subtle shadow for depth */
+    }
+
+
+    </style>
+
     <script src="game.js"></script>
+    <script>
+        // JavaScript to handle modals and sound
+
+        // Game Over modal
+        const gameOverModal = document.getElementById("game-over-modal");
+        const closeModal = document.getElementById("close-modal");
+
+        // Mechanics modal
+        const mechanicsModal = document.getElementById("mechanics-modal");
+        const closeMechanics = document.getElementById("close-mechanics");
+        const mechanicsBtn = document.getElementById("mechanics-btn");
+
+        // Sound control
+        const congratsSound = document.getElementById("congrats-sound");
+
+        // Show game mechanics modal
+        mechanicsBtn.onclick = function() {
+            mechanicsModal.style.display = "block";
+        };
+
+        // Close game mechanics modal
+        closeMechanics.onclick = function() {
+            mechanicsModal.style.display = "none";
+        };
+
+        // Close game over modal and stop sound
+        closeModal.onclick = function() {
+            gameOverModal.style.display = "none";
+            congratsSound.pause();
+            congratsSound.currentTime = 0; // Reset sound to beginning
+        };
+
+        // Close modals if clicking outside of them
+        window.onclick = function(event) {
+            if (event.target == gameOverModal) {
+                gameOverModal.style.display = "none";
+                congratsSound.pause();
+                congratsSound.currentTime = 0;
+            }
+            if (event.target == mechanicsModal) {
+                mechanicsModal.style.display = "none";
+            }
+        };
+
+        // Play congratulatory sound when game over modal is displayed (for example, when the game ends)
+        function showGameOverModal() {
+            gameOverModal.style.display = "block";
+            congratsSound.play();
+        }
+
+    </script>
 </body>
 </html>
