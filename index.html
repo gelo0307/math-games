@@ -3,6 +3,7 @@
 <head>
     <title>triple MATcH mania</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" href="Riddle Game.png" type="image/png">
     <link href="https://fonts.googleapis.com/css2?family=Pacifico&display=swap" rel="stylesheet">
 
     <link rel="stylesheet" href="styles.css">
@@ -52,11 +53,9 @@
             <h2>Game Mechanics</h2>
             <p>Instructions on how to play the game:</p>
             <ul>
-
-               	<li> Pick a Square: Select any square on the grid.</li><br>
-	        <li> Adjust Numbers: The selected square’s number will decrease by 1, while the numbers in the directly adjacent squares (up, down, left, right) increase by 1.</li><br>
-	        <li> Clearing Matches: If three squares align with the same number (in a row, column, or diagonal), they will be removed from the grid. And the numbers wont change even though its is included in the adjacent squares</li><br>
-	        <li>Game End: The game ends when all of the numbers are matched or if it exceeded the time limit</li><br>
+                <li>Match the numbers on the game board within the time limit.</li>
+                <li>Choose a difficulty level to start the game.</li>
+                <li>Earn points and tokens based on your performance.</li>
             </ul>
         </div>
     </div>
@@ -64,18 +63,6 @@
     <audio id="congrats-sound" src="congrats.mp3"></audio> <!-- Congratulation sound -->
 
     <style>
-
-	/* Target the mechanics list inside the modal */
-#game-over-modal ul {
-    text-align: left; /* Align text to the left */
-    padding-left: 20px; /* Optional: Add padding to indent the list */
-    list-style-type: disc; /* Optional: Change the list style to bullets */
-}
-
-#game-over-modal li {
-    margin-bottom: 10px; /* Optional: Add spacing between list items */
-}
-
         body {
     font-family: Arial, sans-serif;
     background-image: url('bg.jpg');

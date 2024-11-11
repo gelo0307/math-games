@@ -149,13 +149,13 @@ document.addEventListener("DOMContentLoaded", () => {
         );
     
         if (newMatches.length > 0) {
-            // Adjust scoring based on grid size
+            // Retain original scoring system: score once per match set
             if (gridSize === 3) {
                 points += 3;    // 3 points for each match in 3x3 grid
-                tokens += 4;    // 4 tokens for each match in 3x3 grid
+                tokens += 1;    // 1 token for each match in 3x3 grid
             } else if (gridSize === 4) {
                 points += 4;    // 4 points for each match in 4x4 grid
-                tokens += 5;    // 5 tokens for each match in 4x4 grid
+                tokens += 2;    // 2 tokens for each match in 4x4 grid
             }
     
             previousMatches.push(...newMatches);
@@ -171,6 +171,8 @@ document.addEventListener("DOMContentLoaded", () => {
     
         updateScoreDisplay(); // Update the score display after scoring
     }
+    
+    
     
     
     function showGameOverNotice(message) {
