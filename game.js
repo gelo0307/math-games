@@ -40,32 +40,33 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     // Render Grid
+   
+   
     function renderGrid() {
         board.innerHTML = "";
-        board.style.gridTemplateColumns = `repeat(${gridSize}, 1fr)`; // Dynamic grid layout
-
+        board.style.gridTemplateColumns = `repeat(${gridSize}, 1fr)`;
+    
         for (let row = 0; row < gridSize; row++) {
             for (let col = 0; col < gridSize; col++) {
                 const cell = document.createElement("div");
                 cell.textContent = grid[row][col];
                 cell.classList.add("cell");
-
-                if (unclickableSquares[row][col]) {
-                    cell.classList.add("unclickable");
-                } else if (!gameOver) {
+    
+                if (!gameOver) {
                     cell.addEventListener("click", () => handleCellClick(row, col));
                 }
-
+    
+                // Apply blinking class to matched cells
                 if (previousMatches.some(([r, c]) => r === row && c === col)) {
-                    cell.classList.add("blink-red");
+                    cell.classList.add("blink");
                 }
+    
                 board.appendChild(cell);
             }
         }
         updateScoreDisplay();
     }
 
-    
 
     // Handle Cell Click
     function handleCellClick(row, col) {
@@ -97,7 +98,8 @@ document.addEventListener("DOMContentLoaded", () => {
 
     function checkMatches() {
         const matches = [];
-        const matchedCells = new Set(); // Track cells that are already matched
+        const maxNumber = gridSize * gridSize;
+        const matchedCells = new Set();
     
         // Horizontal Matches
         for (let i = 0; i < gridSize; i++) {
@@ -143,36 +145,46 @@ document.addEventListener("DOMContentLoaded", () => {
             });
         }
     
-        // Filter out previously matched cells to avoid double counting
-        let newMatches = matches.filter(([r, c]) =>
-            !previousMatches.some(([pr, pc]) => pr === r && pc === c)
-        );
-    
-        if (newMatches.length > 0) {
-            // Retain original scoring system: score once per match set
-            if (gridSize === 3) {
-                points += 3;    // 3 points for each match in 3x3 grid
-                tokens += 1;    // 1 token for each match in 3x3 grid
-            } else if (gridSize === 4) {
-                points += 4;    // 4 points for each match in 4x4 grid
-                tokens += 2;    // 2 tokens for each match in 4x4 grid
-            }
-    
-            previousMatches.push(...newMatches);
-    
-            // Play the correct sound when a match is made
+        if (matches.length > 0) {
+            points += gridSize;
+            tokens += 1;
             correctSound.play();
+    
+            // Store matched cells for blinking in renderGrid
+            previousMatches = matches;
+    
+            // Apply blink effect to matched cells and log it
+            matches.forEach(([r, c]) => {
+                const cellElement = board.children[r * gridSize + c];
+                if (cellElement) {
+                    console.log(`Blinking cell at (${r}, ${c})`); // Debug log
+                    cellElement.classList.add("blink"); // Add blinking class
+                }
+            });
+    
+            // Ensure the blink lasts long enough (set timeout before clearing)
+            setTimeout(() => {
+                matches.forEach(([r, c]) => {
+                    grid[r][c] = Math.floor(Math.random() * maxNumber) + 1;
+                    const cellElement = board.children[r * gridSize + c];
+                    if (cellElement) {
+                        cellElement.classList.remove("blink"); // Remove blinking class after timeout
+                    }
+                });
+                previousMatches = [];  // Clear previous matches
+                renderGrid();  // Re-render the grid after removing blink
+                updateScoreDisplay();
+            }, 1500); // Wait 1.5 seconds before removing the blink (longer for visibility)
         }
-    
-        // Mark matched cells as unclickable
-        newMatches.forEach(([r, c]) => {
-            unclickableSquares[r][c] = true;
-        });
-    
-        updateScoreDisplay(); // Update the score display after scoring
     }
     
     
+    
+    
+    
+      
+    
+  
     
     
     function showGameOverNotice(message) {

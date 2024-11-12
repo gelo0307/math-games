@@ -60,10 +60,27 @@
         </div>
     </div>
 
+   
+
     <audio id="congrats-sound" src="congrats.mp3"></audio> <!-- Congratulation sound -->
 
     <style>
-        body {
+
+.blink {
+    background-color: yellow !important;
+    animation: blink-animation 1s infinite;
+    color: black;  /* Ensure text is visible on yellow */
+    border: none;  /* Remove border if it interferes */
+    box-shadow: none;  /* Remove shadow if interfering */
+}
+
+
+@keyframes blink-animation {
+    0%, 100% { opacity: 1; background-color: yellow; }
+    50% { opacity: 0.5; background-color: yellow; }
+}
+
+     body {
     font-family: Arial, sans-serif;
     background-image: url('bg.jpg');
     background-size: cover; /* Ensures the background covers the whole viewport */
@@ -230,7 +247,10 @@ h1 {
             gameOverModal.style.display = "block";
             congratsSound.play();
         }
+        console.log(`Adding blink class to cell at (${r}, ${c})`);
+cellElement.classList.add("blink");
 
+        
     </script>
 </body>
 </html>
